@@ -2,7 +2,9 @@ package com.kixmc.backpacks.core;
 
 import com.kixmc.backpacks.commands.BackpackCommand;
 import com.kixmc.backpacks.listeners.*;
+import me.mattstudios.mf.base.CommandManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.RecipeChoice;
@@ -24,7 +26,15 @@ public class SimpleBackpacks extends JavaPlugin {
 
         main = this;
 
-        getCommand("backpacks").setExecutor(new BackpackCommand());
+        CommandManager commandManager = new CommandManager(this);
+
+        commandManager.getMessageHandler().register("cmd.no.permission", sender -> {
+            sender.sendMessage(ChatColor.RED + "You don't have permission to do that.");
+        });
+        commandManager.getMessageHandler().register("cmd.no.console", sender -> {
+            sender.sendMessage(ChatColor.RED + "You have to be a player to obtain a backpack!");
+        });
+        commandManager.register(new BackpackCommand());
 
         getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
         getServer().getPluginManager().registerEvents(new InventoryClose(), this);
