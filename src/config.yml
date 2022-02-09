@@ -14,6 +14,7 @@ backpack:
       C:
         - "CHEST"
   material: CHEST
+  custom-model-data: 1
   rows: 2
   gui-title: "Contents"
   allow-shulker-boxes-in-backpacks: false

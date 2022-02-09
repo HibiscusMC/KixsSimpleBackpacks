@@ -25,6 +25,7 @@ public class BackpackItem {
         for (String loreLine : SimpleBackpacks.get().getConfig().getStringList("backpack.lore.new")) { lore.add(ChatUtil.colorize(loreLine)); }
 
         itemMeta.setLore(lore);
+        itemMeta.setCustomModelData(SimpleBackpacks.get().getConfig().getInt("backpack.custom-model-data"));
         backpack.setItemMeta(itemMeta);
 
         return backpack;
