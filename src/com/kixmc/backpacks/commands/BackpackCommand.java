@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 @Command("backpack")
 public class BackpackCommand extends CommandBase {
 
-    public final String usage = ChatColor.RED + "/backpacks <get|reload|give> [player]";
+    public static final String usage = ChatColor.RED + "/backpacks <get|reload|give> [player]";
 
     @Default
     public void onDefault(final Player player) {
