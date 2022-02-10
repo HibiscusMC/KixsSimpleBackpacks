@@ -27,9 +27,12 @@ public class BackpackCommand extends CommandBase {
 
     @SubCommand("give")
     @Permission("backpacks.givecommand")
-    public void giveCommand(CommandSender sender, String playerName) {
-        Bukkit.getPlayer(playerName).getInventory().addItem(BackpackItem.makeUnopened());
-        sender.sendMessage(ChatColor.GREEN + "Gave a backpack to " + playerName + "!");
+    public void giveCommand(CommandSender sender, final Player player) {
+        if (player == null) {
+            return;
+        }
+        Bukkit.getPlayer(player.getName()).getInventory().addItem(BackpackItem.makeUnopened());
+        sender.sendMessage(ChatColor.GREEN + "Gave a backpack to " + player.getName() + "!");
     }
 
     @SubCommand("reload")
