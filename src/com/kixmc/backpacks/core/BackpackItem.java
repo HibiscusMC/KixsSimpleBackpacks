@@ -46,6 +46,7 @@ public class BackpackItem {
         for (String loreLine : SimpleBackpacks.get().getConfig().getStringList("backpack.lore.empty")) { lore.add(ChatUtil.colorize(loreLine.replace("{SLOTS_IN_USE}", "0")).replace("{MAX_SLOTS}", Integer.toString(SimpleBackpacks.get().getConfig().getInt("backpack.rows") * 9))); }
 
         itemMeta.setLore(lore);
+        itemMeta.setCustomModelData(SimpleBackpacks.get().getConfig().getInt("backpack.custom-model-data"));
         backpack.setItemMeta(itemMeta);
 
         return backpack;
