@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,6 +32,11 @@ public class InventoryClose implements Listener {
 
         ItemHandler.store(e.getPlayer().getInventory().getItemInMainHand(), tidiedContents);
 
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDroppingWhilstOpen(PlayerDropItemEvent e) {
+        if (BackpackUtils.isBackpack(e.getItemDrop().getItemStack())) e.getPlayer().closeInventory();
     }
 
 }
