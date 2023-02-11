@@ -42,7 +42,9 @@ public class SimpleBackpacks extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
         getServer().getPluginManager().registerEvents(new PrepareAnvil(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
-        getServer().getPluginManager().registerEvents(new PrepareItemCraft(), this);
+        if (getConfig().getBoolean("backpack.enable-recipe")) {
+            getServer().getPluginManager().registerEvents(new PrepareItemCraft(), this);
+        }
 
         loadConfig();
         createRecipe();
@@ -73,24 +75,24 @@ public class SimpleBackpacks extends JavaPlugin {
     }
 
     public void createRecipe() {
+        if (getConfig().getBoolean("backpack.enable-recipe")) {
+            ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(this, "kixs-backpacks"), BackpackItem.makeUnopened());
 
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(this, "kixs-backpacks"), BackpackItem.makeUnopened());
+            recipe.shape(getConfig().getString("backpack.recipe.shape.top"), getConfig().getString("backpack.recipe.shape.mid"), getConfig().getString("backpack.recipe.shape.btm"));
 
-        recipe.shape(getConfig().getString("backpack.recipe.shape.top"), getConfig().getString("backpack.recipe.shape.mid"), getConfig().getString("backpack.recipe.shape.btm"));
+            for (String ingredientKey : getConfig().getConfigurationSection("backpack.recipe.key").getKeys(false)) {
 
-        for (String ingredientKey : getConfig().getConfigurationSection("backpack.recipe.key").getKeys(false)) {
+                ArrayList<Material> choices = new ArrayList<>();
+                for (String choice : getConfig().getStringList("backpack.recipe.key." + ingredientKey)) {
+                    choices.add(Material.valueOf(choice));
+                }
 
-            ArrayList<Material> choices = new ArrayList<>();
-            for (String choice : getConfig().getStringList("backpack.recipe.key." + ingredientKey)) {
-                choices.add(Material.valueOf(choice));
+                recipe.setIngredient(ingredientKey.charAt(0), new RecipeChoice.MaterialChoice(choices));
+
             }
 
-            recipe.setIngredient(ingredientKey.charAt(0), new RecipeChoice.MaterialChoice(choices));
+            Bukkit.addRecipe(recipe);
 
         }
-
-        Bukkit.addRecipe(recipe);
-
     }
-
 }
