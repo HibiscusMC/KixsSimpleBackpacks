@@ -1,17 +1,21 @@
 package com.kixmc.backpacks.listeners;
 
 import com.kixmc.backpacks.contents.ItemHandler;
+import com.kixmc.backpacks.core.PlayerSlots;
 import com.kixmc.backpacks.core.SimpleBackpacks;
 import com.kixmc.backpacks.utils.BackpackUtils;
+import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,8 +25,11 @@ public class InventoryClose implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryClose(InventoryCloseEvent e) {
+        if (!PlayerSlots.hasSlot(e.getPlayer().getUniqueId())) {
+            return;
+        }
 
-        if (!(BackpackUtils.isBackpack(e.getPlayer().getInventory().getItemInMainHand()) && e.getView().getTitle().equals(SimpleBackpacks.get().getConfig().getString("backpack.gui-title"))))
+        if (!(BackpackUtils.isBackpack(e.getPlayer().getInventory().getItem(PlayerSlots.getSlot(e.getPlayer().getUniqueId()))) && e.getView().getTitle().equals(SimpleBackpacks.get().getConfig().getString("backpack.gui-title"))))
             return;
 
         Inventory dummyInventory = Bukkit.createInventory(e.getPlayer(), 54, "");
@@ -32,7 +39,8 @@ public class InventoryClose implements Listener {
 
         Arrays.stream(dummyInventory.getContents()).filter(Objects::nonNull).forEach(tidiedContents::add);
 
-        ItemHandler.store(e.getPlayer().getInventory().getItemInMainHand(), tidiedContents);
+        ItemHandler.store(e.getPlayer().getInventory().getItem(PlayerSlots.getSlot(e.getPlayer().getUniqueId())), tidiedContents);
+        PlayerSlots.removePlayerSlot(e.getPlayer().getUniqueId());
 
     }
 
@@ -46,5 +54,4 @@ public class InventoryClose implements Listener {
         if (BackpackUtils.isBackpack(e.getOffHandItem()) || BackpackUtils.isBackpack(e.getMainHandItem()))
             e.getPlayer().closeInventory();
     }
-
 }

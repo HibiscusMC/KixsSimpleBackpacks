@@ -1,6 +1,7 @@
 package com.kixmc.backpacks.listeners;
 
 import com.kixmc.backpacks.contents.ItemHandler;
+import com.kixmc.backpacks.core.PlayerSlots;
 import com.kixmc.backpacks.core.SimpleBackpacks;
 import com.kixmc.backpacks.core.BackpackItem;
 import com.kixmc.backpacks.utils.BackpackUtils;
@@ -24,7 +25,6 @@ public class PlayerInteract implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(PlayerInteractEvent e) {
-
         if (!e.hasItem()) return;
 
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -77,11 +77,9 @@ public class PlayerInteract implements Listener {
                 for (ItemStack itemStack : itemOverflow) {
                     e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), itemStack);
                 }
-
                 e.getPlayer().openInventory(backpack);
-
+                PlayerSlots.addPlayerSlot(e.getPlayer().getUniqueId(), e.getPlayer().getInventory().getHeldItemSlot());
             }
-
         }
     }
 

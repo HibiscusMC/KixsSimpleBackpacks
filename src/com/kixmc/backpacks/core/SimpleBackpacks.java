@@ -42,6 +42,8 @@ public class SimpleBackpacks extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
         getServer().getPluginManager().registerEvents(new PrepareAnvil(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
+
         if (getConfig().getBoolean("backpack.enable-recipe")) {
             getServer().getPluginManager().registerEvents(new PrepareItemCraft(), this);
         }
